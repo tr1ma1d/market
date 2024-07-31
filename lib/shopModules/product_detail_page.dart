@@ -85,21 +85,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 child: Container(
                   padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(25),
                   ),
                   child: Row(
                     children: [
                       const Icon(
                         Icons.star,
                         color: Color.fromARGB(255, 216, 59, 255),
-                        size: 20,
+                        size: 14,
                       ),
                       const SizedBox(width: 5),
                       Text(
                         '${widget.product.rating}/5',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -112,19 +112,27 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Text(
                     widget.product.title!,
-                    style: const TextStyle(fontSize: 18.0, color: Colors.black),
+                    style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(width: 10.0),
-                Text(
-                  '${widget.product.price} руб.',
-                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
-                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    '${widget.product.price} руб.',
+                    style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.purple,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
               ],
             ),
           ),
@@ -202,7 +210,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
               ),
               child: Text(
-                isAddedToCart ? 'Добавлено' : 'В корзину',
+                isAddedToCart ? 'Добавлено' : 'Добавить в корзину',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white,
                       // Purple color

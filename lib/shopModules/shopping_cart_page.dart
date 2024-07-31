@@ -93,39 +93,45 @@ class _StateCart extends State<ShoppingCartPage> {
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      '${product.price} руб.',
-                      style: const TextStyle(
-                          fontSize: 16, color: Colors.purple),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 201, 200, 200),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          cart.items.remove(product);
-                        });
-                      },
-                    ),
-                    Text('$quantity', style: const TextStyle(color: Colors.black)),
-                    IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        setState(() {
-                          cart.items.add(product);
-                        });
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${product.price} руб.',
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.purple),
+                        ),
+                        Container(
+                     
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 201, 200, 200),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.delete,
+                                    size: 16, color: Colors.black),
+                                onPressed: () {
+                                  setState(() {
+                                    cart.items.remove(product);
+                                  });
+                                },
+                              ),
+                              Text('$quantity',
+                                  style: const TextStyle(color: Colors.black)),
+                              IconButton(
+                                icon: const Icon(Icons.add, size: 16),
+                                onPressed: () {
+                                  setState(() {
+                                    cart.items.add(product);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
