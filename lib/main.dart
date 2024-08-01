@@ -4,6 +4,7 @@ import 'package:internet_market/shopModules/api/product_api.dart';
 import 'package:internet_market/shopModules/models/category_controller.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
 import 'package:internet_market/core/themes/theme.dart';
+import 'package:internet_market/shopModules/models/products_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:internet_market/shopModules/category_page.dart';
 
@@ -25,6 +26,10 @@ class MyApp extends StatelessWidget {
               CategoryApi('https://onlinestore.whitetigersoft.ru'),
               ProductApi('https://onlinestore.whitetigersoft.ru')),
         ),
+        ChangeNotifierProvider(
+            create: (_) => ProductsController(
+                  ProductApi('https://onlinestore.whitetigersoft.ru'),
+                ))
       ],
       child: MaterialApp(
         theme: appTheme,
@@ -33,4 +38,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

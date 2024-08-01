@@ -35,7 +35,6 @@ class _CategoryPageState extends State<CategoryPage> {
           alignment: Alignment.center,
           children: [
             FloatingActionButton(
-              backgroundColor: Colors.purple,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -46,7 +45,6 @@ class _CategoryPageState extends State<CategoryPage> {
               },
               child: const Icon(
                 Icons.shopping_cart,
-                color: Colors.black,
               ),
             ),
             Positioned(

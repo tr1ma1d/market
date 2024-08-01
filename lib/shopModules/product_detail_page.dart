@@ -92,7 +92,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     children: [
                       const Icon(
                         Icons.star,
-                        color: Color.fromARGB(255, 216, 59, 255),
                         size: 14,
                       ),
                       const SizedBox(width: 5),
@@ -168,9 +167,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+      
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },

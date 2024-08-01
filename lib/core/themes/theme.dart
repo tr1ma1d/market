@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 final ThemeData appTheme = ThemeData(
   primarySwatch: Colors.purple,
   appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.purple,
-    foregroundColor: Colors.white,
+    backgroundColor: Colors.white,
+    foregroundColor: Colors.black,
+    iconTheme: IconThemeData(color: Colors.black)
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: Colors.purple,

@@ -1,27 +1,39 @@
 import 'dart:developer';
+import 'package:internet_market/core/models/base_list_model.dart';
 import 'package:internet_market/shopModules/api/product_api.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
 
-
-class ProductsController {
-  //  наследовать от BaseListModel
-  
-  // загрузку данных производим через переопределение метода  loadNextItems
+class ProductsController extends BaseListModel<Product> {
+  final int itemsPerPage = 10;
   final ProductApi apiService;
-
+  String? _selectedCategory;
   ProductsController(this.apiService);
 
-  Future<List<Product>> fetchProducts(String selectedCategory) async {
+  @override
+  Future<void> loadNextItems(int offset) async {
+    if (isLoading || !hasMoreItems) return;
+
+    notifyListeners();
+
     try {
-      // Выполняем запрос и получаем список продуктов
-      List<Product> products = await apiService.getProducts(selectedCategory);
-      // Логируем полученный список продуктов
-      log('Fetched products: $products');
-      return products;
+      List<Product> products = await apiService.getProducts(
+        selectedCategory: _selectedCategory ?? '',
+        offset: offset,
+        limit: itemsPerPage,
+      );
+      onNextItemsLoaded(products);
     } catch (e) {
-      // Обрабатываем ошибки, если запрос не удался
-      log('Failed to fetch products: $e');
-      rethrow;
+      log('Error loading next items: $e');
+    } finally {
+      notifyListeners();
     }
   }
+
+  void setSelectedCategory(String? category) {
+    _selectedCategory = category;
+    reload();
+     // Перезагружаем данные при изменении категории
+  }
+
+  String? get selectedCategory => _selectedCategory;
 }

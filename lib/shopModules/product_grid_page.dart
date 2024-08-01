@@ -1,41 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:internet_market/shopModules/api/product_api.dart';
-import 'package:internet_market/shopModules/models/entities/product.dart';
+import 'package:provider/provider.dart';
 import 'package:internet_market/shopModules/models/products_controller.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
 import 'package:internet_market/shopModules/shopping_cart_page.dart';
 import 'package:internet_market/shopModules/views/product_grid_item.dart';
-import 'package:provider/provider.dart';
 
 class ProductsView extends StatefulWidget {
   final String categoryTitle;
 
   const ProductsView({super.key, required this.categoryTitle});
+
   @override
-  // ignore: library_private_types_in_public_api
   _ProductsViewState createState() => _ProductsViewState();
 }
 
 class _ProductsViewState extends State<ProductsView> {
-  final ProductsController controller =
-      ProductsController(ProductApi('https://onlinestore.whitetigersoft.ru'));
-  Future<List<Product>>? _products;
-  ShoppingCartModel shoppingCartModel = ShoppingCartModel();
-
-  int cartCount = 0;
-
   @override
   void initState() {
     super.initState();
-    _products = controller.fetchProducts(widget
-        .categoryTitle); // Use widget.categoryTitle instead of categoryTitle
-    updateCartCount();
+
+    final controller = Provider.of<ProductsController>(context, listen: false);
+    controller.setSelectedCategory(widget.categoryTitle);
+    controller.loadNextItems(0); // Load initial items
   }
 
-  void updateCartCount() {
-    setState(() {
-      cartCount = shoppingCartModel.items.length;
-    });
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ProductsController>(
+      builder: (context, controller, child) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              // color: Colors.black,
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Text(
+              widget.categoryTitle,
+              style: const TextStyle(color: Colors.black),
+            ),
+            actions: buildActions(),
+            
+          ),
+          body: NotificationListener<ScrollNotification>(
+            onNotification: (ScrollNotification scrollInfo) {
+              if (scrollInfo.metrics.pixels ==
+                  scrollInfo.metrics.maxScrollExtent) {
+                if (!controller.isLoading && controller.hasMoreItems) {
+                  controller.loadNextItems(controller.items.length);
+                }
+              }
+              return true;
+            },
+            child: buildProductGrid(controller),
+          ),
+        );
+      },
+    );
   }
 
   List<Widget> buildActions() {
@@ -57,7 +81,6 @@ class _ProductsViewState extends State<ProductsView> {
               },
               child: const Icon(
                 Icons.shopping_cart,
-                color: Colors.black,
               ),
             ),
             Positioned(
@@ -82,26 +105,19 @@ class _ProductsViewState extends State<ProductsView> {
     ];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          color: Colors.black,
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          widget.categoryTitle,
-          style: const TextStyle(color: Colors.black),
-        ),
-        actions: buildActions(),
+  Widget buildProductGrid(ProductsController controller) {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 8.0,
+        mainAxisSpacing: 8.0,
+        childAspectRatio: 0.58,
       ),
-      //consumer<ProductsController>(
-      body: ProductGridView(products: _products!),
+      itemCount: controller.items.length,
+      itemBuilder: (context, index) {
+        final product = controller.items[index];
+        return ProductGridItem(product: product);
+      },
     );
   }
 }

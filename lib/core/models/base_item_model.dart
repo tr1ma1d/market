@@ -13,7 +13,7 @@ class BaseItemModel<T> extends ChangeNotifier {
   BaseItemModel(this.id);
 
   //load переопределяется в дочерних классах
-
+  
   //onItemLoaded обрабатывает загруженные данные и уведомляет слушателей
 
 }

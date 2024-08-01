@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 class BaseListModel<T> extends ChangeNotifier {
@@ -20,6 +19,14 @@ class BaseListModel<T> extends ChangeNotifier {
   void removeItem(T item) {
     _items.remove(item);
     notifyListeners();
+  }
+
+  void reload() {
+    _items.clear();
+    _isLoading = false;
+    _hasMoreItems = true;
+    notifyListeners();
+    loadNextItems(0);
   }
 
   //loadNextItems - принимает в себя количество ранее загруженных элементов offset,
@@ -58,9 +65,6 @@ class BaseListModel<T> extends ChangeNotifier {
     return [];
   }
 
-  void reload() {
-    notifyListeners();
-  }
   //reload очистит список и вызывает loadNextItems с нулевым офсетом, при этом должны быть сброшены флаги загрузки, текущее состояние
   //add локально добавляет новый элемент в список, не вызывает loadNextItems
   //remove локально удаляет элемент из списка, не вызывает loadNextItems
