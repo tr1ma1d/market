@@ -70,7 +70,6 @@ class _ProductsViewState extends State<ProductsView> {
           alignment: Alignment.center,
           children: [
             FloatingActionButton(
-              backgroundColor: Colors.purple,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -111,7 +110,7 @@ class _ProductsViewState extends State<ProductsView> {
         crossAxisCount: 2,
         crossAxisSpacing: 8.0,
         mainAxisSpacing: 8.0,
-        childAspectRatio: 0.58,
+        childAspectRatio: 0.62,
       ),
       itemCount: controller.items.length,
       itemBuilder: (context, index) {

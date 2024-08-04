@@ -19,7 +19,8 @@ class ProductGridItem extends StatelessWidget {
         children: [
           if (product.imageUrl?.isNotEmpty ?? false)
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(12)),
               child: Image.network(
                 product.imageUrl!,
                 height: 150.0,
@@ -43,19 +44,18 @@ class ProductGridItem extends StatelessWidget {
                     children: [
                       Text(
                         '${product.price} руб.',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400),
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.star, color: Colors.purple, size: 14),
+                          const Icon(Icons.star,
+                              color: Colors.purple, size: 14),
                           const SizedBox(width: 4),
                           Text(
-                            '${product.rating}/5',
-                            style: const TextStyle(fontSize: 11),
+                            product.rating != null
+                                  ? '${product.rating}/5'
+                                  : '0/5',
+                              style: const TextStyle(fontSize: 11),
                           ),
                         ],
                       ),

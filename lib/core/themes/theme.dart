@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+//TODO: make more color and adding images
 final ThemeData appTheme = ThemeData(
   primarySwatch: Colors.purple,
   appBarTheme: const AppBarTheme(
@@ -12,9 +12,10 @@ final ThemeData appTheme = ThemeData(
     foregroundColor: Colors.white,
   ),
   textTheme: const TextTheme(
-    titleLarge: TextStyle(fontSize: 24.0),  // TextStyle для заголовков
-    bodyLarge: TextStyle(fontSize: 14.0),  // TextStyle для основного текста
-    bodyMedium: TextStyle(fontSize: 12.0, color: Colors.black),  // TextStyle для второстепенного текста
+    titleLarge: TextStyle(fontSize: 24.0, color: Colors.black, fontWeight: FontWeight.w500),  // TextStyle для заголовков
+    bodyLarge: TextStyle(fontSize: 18.0, color: Colors.black),  // TextStyle для основного текста
+    bodyMedium: TextStyle(fontSize: 14.0, color: Colors.black),
+    bodySmall: TextStyle(fontSize: 11.0, color: Colors.black),  // TextStyle для второстепенного текста
   ),
   iconTheme: const IconThemeData(
     color: Colors.purple,
@@ -26,5 +27,10 @@ final ThemeData appTheme = ThemeData(
 
     ),
   ),
+  cardTheme: const CardTheme(
+    color: Colors.white,
+  ),
+  indicatorColor: Colors.grey,
   
+
 );

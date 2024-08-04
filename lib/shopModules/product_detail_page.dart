@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/widgets.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
 import 'package:internet_market/shopModules/shopping_cart_page.dart';
@@ -15,7 +17,6 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  ShoppingCartModel shoppingCartModel = ShoppingCartModel();
   bool isAddedToCart = false;
 
   void addToCart() {
@@ -25,7 +26,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     Provider.of<ShoppingCartModel>(context, listen: false)
         .addItem(widget.product);
     log(widget.product.toString());
-    log(shoppingCartModel.items[0].toString());
+    log(Provider.of<ShoppingCartModel>(context, listen: false)
+        .items[0]
+        .toString());
   }
 
   List<Widget> buildActions(BuildContext context) {
@@ -33,7 +36,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: FloatingActionButton(
-          backgroundColor: Colors.purple,
           onPressed: () {
             Navigator.push(
               context,
@@ -62,30 +64,64 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget buildItem(BuildContext context) {
+    int current = 0;
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Stack(
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0),
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 400.0,
+                  autoPlay: false,
+                  enlargeCenterPage: true,
+                  viewportFraction: 1,
+                  aspectRatio: 2.0,
+                  initialPage: 2,
                 ),
-                child: Image.network(
-                  widget.product.imageUrl!,
-                  height: 200.0,
-                  fit: BoxFit.fill,
+                items: widget.product.images?.map((url) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Image.network(
+                        url,
+                        fit: BoxFit.fitWidth,
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
+              Positioned(
+                bottom: 5,
+                left: 0,
+                right: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: widget.product.images!.map((url) {
+                    int index = widget.product.images!.indexOf(url);
+                    return Container(
+                      width: 8.0,
+                      height: 8.0,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 2.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: current == index
+                            ? Color.fromRGBO(0, 0, 0, 0.9)
+                            : Color.fromRGBO(0, 0, 0, 0.4),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
               Positioned(
-                top: 10,
+                top: 30,
                 left: 10,
                 child: Container(
-                  padding: const EdgeInsets.all(5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.7),
+                    color: const Color.fromARGB(255, 235, 235, 235),
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Row(
@@ -96,11 +132,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       const SizedBox(width: 5),
                       Text(
-                        '${widget.product.rating}/5',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        widget.product.rating != null
+                            ? '${widget.product.rating}/5'
+                            : '0/5',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -111,7 +149,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Text(
@@ -131,7 +168,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         color: Colors.purple,
                         fontWeight: FontWeight.bold),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -167,7 +204,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -200,9 +236,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ElevatedButton(
               onPressed: addToCart,
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.purple),
-                fixedSize: WidgetStateProperty.all(const Size(300, 45)),
-                shape: WidgetStateProperty.all(
+                backgroundColor: MaterialStateProperty.all(Colors.purple),
+                fixedSize: MaterialStateProperty.all(const Size(300, 45)),
+                shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -212,7 +248,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 isAddedToCart ? 'Добавлено' : 'Добавить в корзину',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white,
-                      // Purple color
                     ),
               ),
             ),
