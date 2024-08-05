@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:internet_market/shopModules/models/products_controller.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
 import 'package:internet_market/shopModules/shopping_cart_page.dart';
-import 'package:internet_market/shopModules/views/product_grid_item.dart';
+import 'package:internet_market/shopModules/views/product_grid_item.dart'; // Обновите импорт
 
 class ProductsView extends StatefulWidget {
   final String categoryTitle;
@@ -32,8 +32,8 @@ class _ProductsViewState extends State<ProductsView> {
           appBar: AppBar(
             backgroundColor: Colors.white,
             leading: IconButton(
-              // color: Colors.black,
-              icon: const Icon(Icons.arrow_back),
+              color: Colors.black,
+              icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -43,7 +43,6 @@ class _ProductsViewState extends State<ProductsView> {
               style: const TextStyle(color: Colors.black),
             ),
             actions: buildActions(),
-            
           ),
           body: NotificationListener<ScrollNotification>(
             onNotification: (ScrollNotification scrollInfo) {
@@ -55,7 +54,10 @@ class _ProductsViewState extends State<ProductsView> {
               }
               return true;
             },
-            child: buildProductGrid(controller),
+            child: ProductGridItem(
+              products: controller.items,
+              controller: controller,
+            ), // Используйте ProductGridItem здесь
           ),
         );
       },
@@ -102,21 +104,5 @@ class _ProductsViewState extends State<ProductsView> {
         ),
       ),
     ];
-  }
-
-  Widget buildProductGrid(ProductsController controller) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
-        childAspectRatio: 0.62,
-      ),
-      itemCount: controller.items.length,
-      itemBuilder: (context, index) {
-        final product = controller.items[index];
-        return ProductGridItem(product: product);
-      },
-    );
   }
 }

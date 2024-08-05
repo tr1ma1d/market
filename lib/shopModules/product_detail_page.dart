@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/widgets.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
 import 'package:internet_market/shopModules/shopping_cart_page.dart';
@@ -63,8 +62,33 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     ];
   }
 
-  Widget buildItem(BuildContext context) {
+  Widget buildIndicator(BuildContext context) {
     int current = 0;
+    return Positioned(
+      bottom: 10,
+      left: 0,
+      right: 0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: widget.product.images!.map((url) {
+          int index = widget.product.images!.indexOf(url);
+          return Container(
+            width: 8.0,
+            height: 8.0,
+            margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: current == index
+                  ? const Color.fromRGBO(0, 0, 0, 0.9)
+                  : const Color.fromRGBO(0, 0, 0, 0.4),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget buildItem(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +97,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             children: [
               CarouselSlider(
                 options: CarouselOptions(
-                  height: 400.0,
+                  height: 250.0,
                   autoPlay: false,
                   enlargeCenterPage: true,
                   viewportFraction: 1,
@@ -91,83 +115,35 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   );
                 }).toList(),
               ),
-              Positioned(
-                bottom: 5,
-                left: 0,
-                right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: widget.product.images!.map((url) {
-                    int index = widget.product.images!.indexOf(url);
-                    return Container(
-                      width: 8.0,
-                      height: 8.0,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 2.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: current == index
-                            ? Color.fromRGBO(0, 0, 0, 0.9)
-                            : Color.fromRGBO(0, 0, 0, 0.4),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              Positioned(
-                top: 30,
-                left: 10,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 235, 235, 235),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.star,
-                        size: 14,
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        widget.product.rating != null
-                            ? '${widget.product.rating}/5'
-                            : '0/5',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              buildRatingWidget(context),
             ],
           ),
+          buildIndicator(context),
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
                     widget.product.title!,
-                    style: const TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    '${widget.product.price} руб.',
-                    style: const TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.purple,
-                        fontWeight: FontWeight.bold),
-                  ),
+                Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.end, // Выравнивание по правому краю
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        '${widget.product.price} руб.',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: const Color.fromRGBO(86, 64, 218, 1),
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -189,12 +165,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           const SizedBox(height: 10.0),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: Text(
-              widget.product.productDescription!,
-              style: const TextStyle(fontSize: 14.0, color: Colors.black),
-            ),
-          ),
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: SingleChildScrollView(
+                child: Text(
+                  widget.product.productDescription!,
+                  style: const TextStyle(fontSize: 14.0, color: Colors.black),
+                ),
+              )),
         ],
       ),
     );
@@ -205,18 +182,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Text(
           widget.product.title ?? 'Product Detail',
-          style: const TextStyle(color: Colors.black),
         ),
         actions: buildActions(context),
       ),
-      body: buildItem(context),
+      body: Container(
+        color: const Color.fromRGBO(249, 249, 249, 1),
+        child: buildItem(context),
+      ),
       bottomNavigationBar: buildFooter().first,
     );
   }
@@ -224,7 +203,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   List<Widget> buildFooter() {
     return [
       Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         alignment: Alignment.center,
         height: 100,
         decoration: const BoxDecoration(
@@ -236,9 +215,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ElevatedButton(
               onPressed: addToCart,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.purple),
-                fixedSize: MaterialStateProperty.all(const Size(300, 45)),
-                shape: MaterialStateProperty.all(
+                fixedSize: WidgetStateProperty.all(const Size(300, 45)),
+                shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -255,5 +233,37 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
       ),
     ];
+  }
+
+  buildRatingWidget(BuildContext context) {
+    return Positioned(
+      top: 30,
+      left: 10,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 235, 235, 235),
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.star,
+              size: 14,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              widget.product.rating != null
+                  ? '${widget.product.rating}/5'
+                  : '0/5',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

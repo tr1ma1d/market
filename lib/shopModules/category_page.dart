@@ -75,7 +75,8 @@ class _CategoryPageState extends State<CategoryPage> {
         crossAxisCount: 2,
         mainAxisSpacing: 10.0,
         crossAxisSpacing: 10.0,
-        childAspectRatio: 1.0,
+        childAspectRatio: 0.97,
+       
       ),
       itemCount: categories.length,
       itemBuilder: (context, index) {
@@ -95,6 +96,7 @@ class _CategoryPageState extends State<CategoryPage> {
         elevation: 1,
       ),
       body: Consumer<CategoryController>(builder: (context, controller, child) {
+      
         if (controller.isLoading) {
           log('Loading categories...');
           return const Center(child: CircularProgressIndicator());
@@ -106,7 +108,12 @@ class _CategoryPageState extends State<CategoryPage> {
         }
 
         log('Displaying categories: ${controller.items}');
-        return buildGrid(context, controller.items);
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0),
+          color: const Color.fromRGBO(249,249,249, 1),
+          child: buildGrid(context, controller.items),
+          
+        );
       }),
     );
   }
