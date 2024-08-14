@@ -210,8 +210,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ElevatedButton(
             onPressed: () => addToCart(product),
             style: ButtonStyle(
-              fixedSize: MaterialStateProperty.all(const Size(300, 45)),
-              shape: MaterialStateProperty.all(
+              fixedSize: WidgetStateProperty.all(const Size(300, 45)),
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
