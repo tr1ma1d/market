@@ -1,10 +1,11 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 part "category.g.dart";
 
 @JsonSerializable()
-class Category {
+
+
+class Category{
   int? id;
   final String? title;
   String? imageUrl;
@@ -22,7 +23,7 @@ class Category {
       required this.fullName,
       required this.categoryDescription});
   
-
+  
   factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);
   Map<String, dynamic> toJson() => _$CategoryToJson(this);

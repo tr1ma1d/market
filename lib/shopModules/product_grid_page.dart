@@ -20,6 +20,7 @@ class _ProductsViewState extends State<ProductsView> {
     super.initState();
 
     final controller = Provider.of<ProductsController>(context, listen: false);
+   
     controller.setSelectedCategory(widget.categoryTitle);
     controller.loadNextItems(0); // Load initial items
   }

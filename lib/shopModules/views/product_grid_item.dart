@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
 import 'package:internet_market/shopModules/models/products_controller.dart';
 import 'package:internet_market/shopModules/product_detail_page.dart';
+import 'package:provider/provider.dart';
 
 class ProductGridItem extends StatelessWidget {
   final List<Product> products;
@@ -46,20 +47,23 @@ class ProductGridItem extends StatelessWidget {
   }
 
   Widget _buildProductImage(Product product) {
-    return product.imageUrl?.isNotEmpty ?? false
-        ? ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-            child: Image.network(
-              product.imageUrl!,
+    return Expanded(
+      child: product.imageUrl != null && product.imageUrl!.isNotEmpty
+          ? ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+              child: Image.network(
+                product.imageUrl!,
+                height: 150.0,
+                fit: BoxFit.cover,
+              ),
+            )
+          : Container(
               height: 150.0,
-              fit: BoxFit.cover,
+              width: double.infinity,
+              color: Colors.grey[300],
+              child: const Center(child: Icon(Icons.image_not_supported)),
             ),
-          )
-        : Container(
-            height: 150.0,
-            width: double.infinity,
-            color: Colors.grey[300],
-          );
+    );
   }
 
   Widget _buildProductDetails(BuildContext context, Product product) {
@@ -85,7 +89,7 @@ class ProductGridItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '${product.price} руб.',
+            '${product.price ?? 'Не указана цена'} руб.',
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge
@@ -96,9 +100,7 @@ class ProductGridItem extends StatelessWidget {
               const Icon(Icons.star, size: 14),
               const SizedBox(width: 4),
               Text(
-                product.rating != null
-                    ? '${product.rating}/5'
-                    : '0/5',
+                '${product.rating ?? 0}/5',
                 style: const TextStyle(fontSize: 11),
               ),
             ],
@@ -128,16 +130,23 @@ class ProductGridItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
       child: ElevatedButton(
         onPressed: () async {
+          // Перед переходом на страницу деталей, обновляем данные продукта
+          await product.load(product);
+
+          // Переход на страницу деталей продукта
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductDetailPage(product: product),
+              builder: (context) => ChangeNotifierProvider.value(
+                value: product,
+                child: const ProductDetailPage(),
+              ),
             ),
           );
         },
         style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all(const Size(170, 37)),
-          shape: MaterialStateProperty.all(
+          fixedSize: WidgetStateProperty.all(const Size(170, 37)),
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),

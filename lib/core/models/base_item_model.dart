@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 
 class BaseItemModel<T> extends ChangeNotifier {
-  int id;
+  int? id;  // Сделаем id необязательным
   T? item;
 
+  BaseItemModel([this.id]);  // Сделаем id необязательным в конструкторе
 
   void updateItem(T? newItem) {
     item = newItem;
     notifyListeners();
   }
 
-  BaseItemModel(this.id);
-
   //load переопределяется в дочерних классах
-  
-  //onItemLoaded обрабатывает загруженные данные и уведомляет слушателей
+  load(T? newItem) {
+    updateItem(newItem);
+  }
 
+  // Данный метод может быть переопределен в дочерних классах
+  T? onItemLoaded() {
+    return item;
+  }
 }

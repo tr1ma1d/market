@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:internet_market/shopModules/api/category_api.dart';
 import 'package:internet_market/shopModules/api/product_api.dart';
 import 'package:internet_market/shopModules/models/category_controller.dart';
+import 'package:internet_market/shopModules/models/entities/product.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
 import 'package:internet_market/core/themes/theme.dart';
 import 'package:internet_market/shopModules/models/products_controller.dart';
@@ -24,8 +25,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => CategoryController(
               CategoryApi('https://onlinestore.whitetigersoft.ru'),
-              ProductApi('https://onlinestore.whitetigersoft.ru')),
+              ProductApi('https://onlinestore.whitetigersoft.ru'),
+              ),
+       
         ),
+        ChangeNotifierProvider(create: (_) => Product()),
         ChangeNotifierProvider(
             create: (_) => ProductsController(
                   ProductApi('https://onlinestore.whitetigersoft.ru'),
