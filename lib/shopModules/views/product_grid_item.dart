@@ -25,22 +25,28 @@ class ProductGridItem extends StatelessWidget {
           mainAxisSpacing: 8.0,
           childAspectRatio: 0.60,
         ),
-        itemCount: products.length,
+        itemCount: products.length + 1, // +1 для индикатора загрузки
         itemBuilder: (context, index) {
-          final product = products[index];
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildProductImage(product),
-                _buildProductDetails(context, product),
-                _buildDetailsButton(context, product),
-              ],
-            ),
-          );
+          if (index < products.length) {
+            final product = products[index];
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildProductImage(product),
+                  _buildProductDetails(context, product),
+                  _buildDetailsButton(context, product),
+                ],
+              ),
+            );
+          } else {
+            if (!controller.isLoading && controller.hasMoreItems) {
+              return _buildLoadingIndicator();
+            } 
+          }
         },
       ),
     );
@@ -50,7 +56,8 @@ class ProductGridItem extends StatelessWidget {
     return Expanded(
       child: product.imageUrl != null && product.imageUrl!.isNotEmpty
           ? ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(15)),
               child: Image.network(
                 product.imageUrl!,
                 height: 150.0,
@@ -145,14 +152,26 @@ class ProductGridItem extends StatelessWidget {
           );
         },
         style: ButtonStyle(
-          fixedSize: WidgetStateProperty.all(const Size(170, 37)),
-          shape: WidgetStateProperty.all(
+          fixedSize: MaterialStateProperty.all(const Size(170, 37)),
+          shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
           ),
         ),
         child: const Text('Подробнее'),
+      ),
+    );
+  }
+
+  // Индикатор загрузки
+  Widget _buildLoadingIndicator() {
+    return const GridTile(
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.0),
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }

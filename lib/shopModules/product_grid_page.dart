@@ -58,7 +58,7 @@ class _ProductsViewState extends State<ProductsView> {
             child: ProductGridItem(
               products: controller.items,
               controller: controller,
-            ), // Используйте ProductGridItem здесь
+            ), 
           ),
         );
       },

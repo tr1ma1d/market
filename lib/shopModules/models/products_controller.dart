@@ -7,6 +7,7 @@ class ProductsController extends BaseListModel<Product> {
   final int itemsPerPage = 10;
   final ProductApi apiService;
   String? _selectedCategory;
+
   ProductsController(this.apiService);
 
   @override
@@ -16,11 +17,13 @@ class ProductsController extends BaseListModel<Product> {
     notifyListeners();
 
     try {
+      await Future.delayed(const Duration(seconds: 2));
       List<Product> products = await apiService.getProducts(
         selectedCategory: _selectedCategory ?? '',
         offset: offset,
         limit: itemsPerPage,
       );
+      
       onNextItemsLoaded(products);
     } catch (e) {
       log('Error loading next items: $e');
