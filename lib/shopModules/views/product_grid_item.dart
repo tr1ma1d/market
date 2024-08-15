@@ -18,6 +18,7 @@ class ProductGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: const Color.fromRGBO(249, 249, 249, 1),
+      
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -25,7 +26,7 @@ class ProductGridItem extends StatelessWidget {
           mainAxisSpacing: 8.0,
           childAspectRatio: 0.60,
         ),
-        itemCount: products.length + 1, // +1 для индикатора загрузки
+        itemCount: products.length,
         itemBuilder: (context, index) {
           if (index < products.length) {
             final product = products[index];
@@ -45,7 +46,7 @@ class ProductGridItem extends StatelessWidget {
           } else {
             if (!controller.isLoading && controller.hasMoreItems) {
               return _buildLoadingIndicator();
-            } 
+            }
           }
         },
       ),
@@ -152,8 +153,8 @@ class ProductGridItem extends StatelessWidget {
           );
         },
         style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all(const Size(170, 37)),
-          shape: MaterialStateProperty.all(
+          fixedSize: WidgetStateProperty.all(const Size(170, 37)),
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -166,11 +167,16 @@ class ProductGridItem extends StatelessWidget {
 
   // Индикатор загрузки
   Widget _buildLoadingIndicator() {
-    return const GridTile(
-      child: Center(
+    return GridTile(
+      header: Container(
+        width: double.infinity,
+      ),
+      child: const Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0),
-          child: CircularProgressIndicator(),
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
         ),
       ),
     );
