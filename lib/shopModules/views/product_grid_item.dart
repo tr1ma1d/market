@@ -3,6 +3,7 @@ import 'package:internet_market/shopModules/models/entities/product.dart';
 import 'package:internet_market/shopModules/models/products_controller.dart';
 import 'package:internet_market/shopModules/product_detail_page.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductGridItem extends StatelessWidget {
   final List<Product> products;
@@ -18,7 +19,6 @@ class ProductGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: const Color.fromRGBO(249, 249, 249, 1),
-      
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -26,7 +26,7 @@ class ProductGridItem extends StatelessWidget {
           mainAxisSpacing: 8.0,
           childAspectRatio: 0.60,
         ),
-        itemCount: products.length,
+        itemCount: products.length + 2,
         itemBuilder: (context, index) {
           if (index < products.length) {
             final product = products[index];
@@ -167,17 +167,90 @@ class ProductGridItem extends StatelessWidget {
 
   // Индикатор загрузки
   Widget _buildLoadingIndicator() {
-    return GridTile(
-      header: Container(
-        width: double.infinity,
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
       ),
-      child: const Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-          child: Center(
-            child: CircularProgressIndicator(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(15)),
+              child: Skeletonizer(
+                ignoreContainers: true,
+                child: Container(
+                  height: 150.0,
+                  color: Colors.grey[300],
+                ),
+              ),
+            ),
           ),
-        ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Skeletonizer(
+                          child: Container(
+                            width: 60.0,
+                            height: 14.0,
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Icon(Icons.star,
+                                size: 14, color: Colors.grey),
+                            const SizedBox(width: 4),
+                            Skeletonizer(
+                              child: Container(
+                                width: 30.0,
+                                height: 11.0,
+                                color: Colors.grey[300],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Skeletonizer(
+                      child: Container(
+                        width: double.infinity,
+                        height: 16.0,
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+            child: Skeletonizer(
+              child: Container(
+                width: 170.0,
+                height: 37.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
