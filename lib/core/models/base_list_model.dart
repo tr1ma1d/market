@@ -25,7 +25,7 @@ class BaseListModel<T> extends ChangeNotifier {
     _items.clear();
     _isLoading = false;
     _hasMoreItems = true;
-    notifyListeners();
+    
     loadNextItems(0);
   }
 

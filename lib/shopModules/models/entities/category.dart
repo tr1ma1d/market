@@ -6,7 +6,7 @@ part "category.g.dart";
 
 
 class Category{
-  int? id;
+  int? categoryId;
   final String? title;
   String? imageUrl;
   int? hasSubcategory;
@@ -16,7 +16,7 @@ class Category{
 
 
   Category(
-      {required this.id,
+      {required this.categoryId,
       required this.title,
       required this.imageUrl,
       required this.hasSubcategory,

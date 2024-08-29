@@ -1,10 +1,10 @@
-import 'package:internet_market/core/models/base_item_model.dart';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product.g.dart';
 
 @JsonSerializable()
-class Product extends BaseItemModel<Product> {
+class Product  {
   int? productId;
   String? title;
   String? productDescription;
@@ -23,17 +23,8 @@ class Product extends BaseItemModel<Product> {
     this.imageUrl,
     this.images,
     this.isAvailableForSale,
-  }) : super(productId);
+  });
 
-  @override
-  load(Product? newItem) {
-    updateItem(newItem);
-  }
-
-  @override
-  Product onItemLoaded() {
-    return item!;
-  }
 
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);

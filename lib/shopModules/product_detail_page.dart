@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
+import 'package:internet_market/shopModules/models/product_controller.dart';
 import 'package:internet_market/shopModules/shopping_cart_page.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer';
@@ -23,13 +24,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     final shoppingCart = Provider.of<ShoppingCartModel>(context, listen: false);
     shoppingCart.addItem(product);
     log(product.toString());
-    log(shoppingCart.items.isNotEmpty ? shoppingCart.items[0].toString() : 'Корзина пуста');
+    log(shoppingCart.items.isNotEmpty
+        ? shoppingCart.items[0].toString()
+        : 'Корзина пуста');
   }
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context, listen: false);
-
+    final productController =
+        Provider.of<ProductController>(context, listen: false);
+    var product = productController.show();
+    if (product == null) {
+      return Scaffold(
+        body: Center(
+          child: Text('Продукт не найден'),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

@@ -3,12 +3,11 @@ import 'package:internet_market/api/api_service.dart';
 import 'package:internet_market/shopModules/models/entities/category.dart';
 
 class CategoryApi extends ApiService {
-  final String endUrl = '/api/common/category/list';
+  final String endUrl = '/api/common/category/list?';
 
   CategoryApi(super.baseUrl);
 
   final Map<String, String> params = {
-    'categoryId': '3972',
     'appKey':
         'EyZ6DhtHN24DjRJofNZ7BijpNsAZ-TT1is4WbJb9DB7m83rNQCZ7US0LyUg5FCP4eoyUZXmM1z45hY5fIC-JTCgmqHgnfcevkQQpmxi8biwwlSn0zZedvlNh0QkP1-Um'
   };

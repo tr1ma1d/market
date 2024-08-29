@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
+import 'package:internet_market/shopModules/product_grid_page.dart';
 import 'package:internet_market/shopModules/views/category_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:internet_market/shopModules/models/category_controller.dart';
@@ -75,13 +76,21 @@ class _CategoryPageState extends State<CategoryPage> {
         crossAxisCount: 2,
         mainAxisSpacing: 10.0,
         crossAxisSpacing: 10.0,
-        childAspectRatio: 0.97,
+        childAspectRatio: 0.90,
        
       ),
       itemCount: categories.length,
       itemBuilder: (context, index) {
         Category category = categories[index];
-        return CategoryItem(category: category);
+        return GestureDetector(child: CategoryItem(category: category), onTap: () {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            
+            builder: (context) => ProductsView(category: category),
+          ),
+        );
+        },);
       },
     );
   }

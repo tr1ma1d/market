@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:internet_market/shopModules/models/entities/category.dart';
 import 'package:provider/provider.dart';
 import 'package:internet_market/shopModules/models/products_controller.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
@@ -6,9 +7,8 @@ import 'package:internet_market/shopModules/shopping_cart_page.dart';
 import 'package:internet_market/shopModules/views/product_grid_item.dart'; // Обновите импорт
 
 class ProductsView extends StatefulWidget {
-  final String categoryTitle;
-
-  const ProductsView({super.key, required this.categoryTitle});
+  final Category category;
+  const ProductsView({super.key, required this.category});
 
   @override
   _ProductsViewState createState() => _ProductsViewState();
@@ -18,10 +18,8 @@ class _ProductsViewState extends State<ProductsView> {
   @override
   void initState() {
     super.initState();
-
     final controller = Provider.of<ProductsController>(context, listen: false);
-   
-    controller.setSelectedCategory(widget.categoryTitle);
+    controller.setSelectedCategory(widget.category.categoryId);
     controller.loadNextItems(0); // Load initial items
   }
 
@@ -40,7 +38,7 @@ class _ProductsViewState extends State<ProductsView> {
               },
             ),
             title: Text(
-              widget.categoryTitle,
+              widget.category.title.toString(),
               style: const TextStyle(color: Colors.black),
             ),
             actions: buildActions(),
@@ -58,7 +56,7 @@ class _ProductsViewState extends State<ProductsView> {
             child: ProductGridItem(
               products: controller.items,
               controller: controller,
-            ), 
+            ),
           ),
         );
       },

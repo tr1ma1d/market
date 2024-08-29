@@ -12,12 +12,13 @@ class BaseItemModel<T> extends ChangeNotifier {
   }
 
   //load переопределяется в дочерних классах
-  load(T? newItem) {
-    updateItem(newItem);
+  Future<void> load(int newItem) async{
+    notifyListeners();
   }
 
   // Данный метод может быть переопределен в дочерних классах
-  T? onItemLoaded() {
-    return item;
+  void onItemLoaded(T? item) {
+    this.item = item;
+    notifyListeners();
   }
 }

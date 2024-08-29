@@ -6,20 +6,17 @@ import 'package:internet_market/shopModules/models/entities/product.dart';
 class ProductsController extends BaseListModel<Product> {
   final int itemsPerPage = 10;
   final ProductApi apiService;
-  String? _selectedCategory;
+  int? _selectedCategory;
 
   ProductsController(this.apiService);
 
   @override
   Future<void> loadNextItems(int offset) async {
     if (isLoading || !hasMoreItems) return;
-
-    notifyListeners();
-
     try {
       await Future.delayed(const Duration(seconds: 2));
       List<Product> products = await apiService.getProducts(
-        selectedCategory: _selectedCategory ?? '',
+        selectedCategory: _selectedCategory!,
         offset: offset,
         limit: itemsPerPage,
       );
@@ -28,15 +25,15 @@ class ProductsController extends BaseListModel<Product> {
     } catch (e) {
       log('Error loading next items: $e');
     } finally {
-      notifyListeners();
+      
     }
   }
 
-  void setSelectedCategory(String? category) {
-    _selectedCategory = category;
+  void setSelectedCategory(int? categoryId) {
+    _selectedCategory = categoryId;
     reload();
      // Перезагружаем данные при изменении категории
   }
 
-  String? get selectedCategory => _selectedCategory;
+  int? get selectedCategory => _selectedCategory;
 }

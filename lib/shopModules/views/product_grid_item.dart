@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
+import 'package:internet_market/shopModules/models/product_controller.dart';
 import 'package:internet_market/shopModules/models/products_controller.dart';
 import 'package:internet_market/shopModules/product_detail_page.dart';
 import 'package:provider/provider.dart';
@@ -138,17 +139,15 @@ class ProductGridItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
       child: ElevatedButton(
         onPressed: () async {
-          // Перед переходом на страницу деталей, обновляем данные продукта
-          await product.load(product);
+          final productController =
+              Provider.of<ProductController>(context, listen: false);
+          await productController.load(product.productId!);
 
-          // Переход на страницу деталей продукта
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ChangeNotifierProvider.value(
-                value: product,
-                child: const ProductDetailPage(),
-              ),
+              builder: (context) =>
+                  ProductDetailPage(), // Параметры могут потребоваться
             ),
           );
         },
