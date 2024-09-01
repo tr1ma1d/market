@@ -107,7 +107,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: Row(
             children: [
               const Icon(

@@ -49,6 +49,7 @@ class ProductGridItem extends StatelessWidget {
               return _buildLoadingIndicator();
             }
           }
+          return null;
         },
       ),
     );
@@ -98,7 +99,7 @@ class ProductGridItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(child: Text(
-            '${product.price ?? 'Не указана цена'} руб.',
+            '${product.price ?? 'Не указана цена'} ₽',
             style: Theme.of(context)
                 .textTheme
                 .titleMedium

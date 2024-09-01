@@ -5,7 +5,7 @@ import 'package:internet_market/shopModules/api/product_api.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
 
 class ProductController extends BaseItemModel<Product> {
-  ProductController(int id) : super(id);
+  ProductController(int super.id);
 
   ProductApi? productApi;
   Product? product; // Удалено static

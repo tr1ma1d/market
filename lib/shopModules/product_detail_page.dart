@@ -35,7 +35,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         Provider.of<ProductController>(context, listen: false);
     var product = productController.show();
     if (product == null) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Text('Продукт не найден'),
         ),
