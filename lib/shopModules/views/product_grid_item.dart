@@ -97,23 +97,21 @@ class ProductGridItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          Expanded(child: Text(
             '${product.price ?? 'Не указана цена'} руб.',
             style: Theme.of(context)
                 .textTheme
-                .bodyLarge
+                .titleMedium
                 ?.copyWith(fontWeight: FontWeight.w400),
-          ),
-          Row(
-            children: [
+          ),),
+          Row(children: [
               const Icon(Icons.star, size: 14),
               const SizedBox(width: 4),
               Text(
                 '${product.rating ?? 0}/5',
                 style: const TextStyle(fontSize: 11),
               ),
-            ],
-          ),
+            ],)
         ],
       ),
     );
@@ -147,7 +145,7 @@ class ProductGridItem extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  ProductDetailPage(), // Параметры могут потребоваться
+                  const ProductDetailPage(), // Параметры могут потребоваться
             ),
           );
         },

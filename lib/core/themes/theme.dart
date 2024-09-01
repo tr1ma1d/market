@@ -22,7 +22,7 @@ final ThemeData appTheme = ThemeData(
     bodyLarge: TextStyle(
         fontSize: 18.0, color: Colors.black), // TextStyle для основного текста
     bodyMedium: TextStyle(fontSize: 14.0, color: Colors.black),
-    bodySmall: TextStyle(fontSize: 12.0, color: Colors.black),
+    // TextStyles
 
     // TextStyle для подзаголовков
     // TextStyle для второстепенного текста
