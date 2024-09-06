@@ -140,7 +140,7 @@ class ProductGridItem extends StatelessWidget {
         onPressed: () async {
           final productController =
               Provider.of<ProductController>(context, listen: false);
-          await productController.load(product.productId!);
+          await productController.load(product);
 
           await Navigator.push(
             context,

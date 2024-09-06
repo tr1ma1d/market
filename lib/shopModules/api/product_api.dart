@@ -5,7 +5,7 @@ import 'package:internet_market/shopModules/models/entities/product.dart';
 
 class ProductApi extends ApiService {
   final String endUrl = '/api/common/product/list?';
-
+  int? categoryId = 0;
   ProductApi(super.baseUrl);
 
   final Map<String, String> params = {
@@ -18,7 +18,7 @@ class ProductApi extends ApiService {
       {required int selectedCategory,
       required int offset,
       required int limit}) async {
-
+    categoryId = selectedCategory;
     params['categoryId'] = selectedCategory.toString();
     log(params.toString());
     final Map<String, String> queryParams = {
@@ -41,20 +41,5 @@ class ProductApi extends ApiService {
     }
   }
 
-  Future<Product?> getProductById(int? id) async {
-    // Пример запроса для получения продукта по ID
-    var response = await get(endUrl, params);
-    if(response.containsKey('data')) {
-      var data = response['data'] as List<dynamic>;
-      // Преобразование JSON-объекта в Product
-      for(var item in data){
-        var product = Product.fromJson(item);
-        if(product.productId == id){
-          return product; // Найденный продукт
-        }
-      }
-      return null; // Возвращаем продукт
-    }
-    return null;
-  }
+  
 }

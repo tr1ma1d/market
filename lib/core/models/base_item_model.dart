@@ -12,7 +12,7 @@ class BaseItemModel<T> extends ChangeNotifier {
   }
 
   //load переопределяется в дочерних классах
-  Future<void> load(int newItem) async{
+  Future<void> load(T newItem) async{
     notifyListeners();
   }
   T? show(){

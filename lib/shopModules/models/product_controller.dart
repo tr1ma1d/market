@@ -10,9 +10,9 @@ class ProductController extends BaseItemModel<Product> {
   ProductApi? productApi;
 
   @override
-  Future<void> load(int id) async {
-    productApi = ProductApi('https://onlinestore.whitetigersoft.ru');
-    item = await productApi?.getProductById(id);
+  Future<void> load(Product product) async {
+
+    item = product;
     updateItem(item);
   }
   @override
