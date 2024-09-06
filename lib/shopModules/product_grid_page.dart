@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:internet_market/shopModules/api/product_api.dart';
 import 'package:internet_market/shopModules/models/entities/category.dart';
 import 'package:provider/provider.dart';
 import 'package:internet_market/shopModules/models/products_controller.dart';
@@ -15,51 +16,55 @@ class ProductsView extends StatefulWidget {
 }
 
 class _ProductsViewState extends State<ProductsView> {
+  late ProductsController controller;
+
   @override
   void initState() {
     super.initState();
-    final controller = Provider.of<ProductsController>(context, listen: false);
+    controller = ProductsController(ProductApi("https://onlinestore.whitetigersoft.ru"));
     controller.setSelectedCategory(widget.category.categoryId);
-    controller.loadNextItems(0); // Load initial items
+    controller.loadNextItems(0);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProductsController>(
-      builder: (context, controller, child) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            leading: IconButton(
-              color: Colors.black,
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            title: Text(
-              widget.category.title.toString(),
-              style: const TextStyle(color: Colors.black),
-            ),
-            actions: buildActions(),
-          ),
-          body: NotificationListener<ScrollNotification>(
-            onNotification: (ScrollNotification scrollInfo) {
-              if (scrollInfo.metrics.pixels ==
-                  scrollInfo.metrics.maxScrollExtent) {
-                if (!controller.isLoading && controller.hasMoreItems) {
-                  controller.loadNextItems(controller.items.length);
-                }
-              }
-              return true;
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            color: Colors.black,
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
             },
-            child: ProductGridItem(
-              products: controller.items,
-              controller: controller,
-            ),
           ),
-        );
-      },
+          title: Text(
+            widget.category.title.toString(),
+            style: const TextStyle(color: Colors.black),
+          ),
+          actions: buildActions(),
+        ),
+        body: Consumer<ProductsController>(
+          builder: (context, controller, child) {
+            return NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+                  if (!controller.isLoading && controller.hasMoreItems) {
+                    controller.loadNextItems(controller.items.length );
+                  }
+                }
+                return true;
+              },
+              child: ProductGridItem(
+                products: controller.items,
+                controller: controller,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 

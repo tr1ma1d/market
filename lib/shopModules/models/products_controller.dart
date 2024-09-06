@@ -4,7 +4,6 @@ import 'package:internet_market/shopModules/api/product_api.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
 
 class ProductsController extends BaseListModel<Product> {
-  final int itemsPerPage = 10;
   final ProductApi apiService;
   int? _selectedCategory;
 
@@ -34,6 +33,7 @@ class ProductsController extends BaseListModel<Product> {
     reload();
      // Перезагружаем данные при изменении категории
   }
+  
 
   int? get selectedCategory => _selectedCategory;
 }

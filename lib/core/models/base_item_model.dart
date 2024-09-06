@@ -15,7 +15,9 @@ class BaseItemModel<T> extends ChangeNotifier {
   Future<void> load(int newItem) async{
     notifyListeners();
   }
-
+  T? show(){
+    return item;
+  }
   // Данный метод может быть переопределен в дочерних классах
   void onItemLoaded(T? item) {
     this.item = item;

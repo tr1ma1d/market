@@ -8,17 +8,16 @@ class ProductController extends BaseItemModel<Product> {
   ProductController(int super.id);
 
   ProductApi? productApi;
-  Product? product; // Удалено static
 
   @override
   Future<void> load(int id) async {
     productApi = ProductApi('https://onlinestore.whitetigersoft.ru');
-    product = await productApi?.getProductById(id);
-    updateItem(product);
+    item = await productApi?.getProductById(id);
+    updateItem(item);
   }
-  
-  Product? show() { // Изменено на возвращение Product?
-    log(product.toString());
-    return product; // Возвращает null, если product не был загружен
+  @override
+  Product? show() { 
+    log(item.toString());
+    return item;
   }
 }

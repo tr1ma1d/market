@@ -10,6 +10,8 @@ class BaseListModel<T> extends ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get hasMoreItems => _hasMoreItems;
 
+  late int itemsPerPage = 10; 
+
   void addItem(T item) {
     _items.add(item);
     notifyListeners();
@@ -53,11 +55,15 @@ class BaseListModel<T> extends ChangeNotifier {
   //контролирует флаги загрузки, текущее состояние
   //по окончании обработки должен уведометь слушателей об изменении вызвав метод notifyListeners
   void onNextItemsLoaded(List<T> newItems) {
-    if (newItems.isEmpty) {
-      _hasMoreItems = false;
-    } else {
+    if (newItems.isNotEmpty) {
       _items.addAll(newItems);
     }
+
+    // End loading if the number of new items is less than the page size
+    if (newItems.length < itemsPerPage) {
+      _hasMoreItems = false;
+    }
+
     notifyListeners();
   }
 
