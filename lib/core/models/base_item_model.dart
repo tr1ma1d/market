@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BaseItemModel<T> extends ChangeNotifier {
-  int? id;  // Сделаем id необязательным
   T? item;
-
-  BaseItemModel([this.id]);  // Сделаем id необязательным в конструкторе
 
   void updateItem(T? newItem) {
     item = newItem;
@@ -12,8 +9,8 @@ class BaseItemModel<T> extends ChangeNotifier {
   }
 
   //load переопределяется в дочерних классах
-  Future<void> load(T newItem) async{
-    notifyListeners();
+  Future<void> load(int id) async{
+    
   }
   T? show(){
     return item;

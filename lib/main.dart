@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
             create: (_) => ProductsController(
                   ProductApi('https://onlinestore.whitetigersoft.ru'),
                 )),
-        ChangeNotifierProvider(
-          create: (_) => ProductController(0),
-        )
+        // ChangeNotifierProvider(
+        //   create: (_) => ProductController(ProductApi('https://onlinestore.whitetigersoft.ru')),
+        // )
       ],
       child: MaterialApp(
         theme: appTheme,

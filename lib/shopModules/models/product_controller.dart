@@ -5,15 +5,14 @@ import 'package:internet_market/shopModules/api/product_api.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
 
 class ProductController extends BaseItemModel<Product> {
-  ProductController(int super.id);
+  ProductController(this.productApi);
 
-  ProductApi? productApi;
+  final ProductApi productApi;
 
   @override
-  Future<void> load(Product product) async {
-
-    item = product;
-    updateItem(item);
+  Future<void> load(int id) async {
+    item = await productApi.getProductById(id);
+    onItemLoaded(item); 
   }
   @override
   Product? show() { 

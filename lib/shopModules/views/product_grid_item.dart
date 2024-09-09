@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
-import 'package:internet_market/shopModules/models/product_controller.dart';
 import 'package:internet_market/shopModules/models/products_controller.dart';
 import 'package:internet_market/shopModules/product_detail_page.dart';
-import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductGridItem extends StatelessWidget {
@@ -138,15 +136,11 @@ class ProductGridItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
       child: ElevatedButton(
         onPressed: () async {
-          final productController =
-              Provider.of<ProductController>(context, listen: false);
-          await productController.load(product);
-
           await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  const ProductDetailPage(), // Параметры могут потребоваться
+                  ProductDetailPage(productId: product.productId!), // Параметры могут потребоваться
             ),
           );
         },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:internet_market/shopModules/api/product_api.dart';
 import 'package:internet_market/shopModules/models/entities/product.dart';
 import 'package:internet_market/shopModules/models/entities/shoppingcart_model.dart';
 import 'package:internet_market/shopModules/models/product_controller.dart';
@@ -8,19 +9,31 @@ import 'package:provider/provider.dart';
 import 'dart:developer';
 
 class ProductDetailPage extends StatefulWidget {
-  const ProductDetailPage({super.key});
+  final int productId;
+  const ProductDetailPage({super.key, required this.productId});
 
   @override
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  bool isAddedToCart = false;
+  late ProductController productController;
+
+  @override
+  void initState() {
+    super.initState();
+    productController =
+        ProductController(ProductApi('https://onlinestore.whitetigersoft.ru'));
+    productController.load(widget.productId);
+  }
+
+  @override
+  void dispose() {
+    productController.dispose(); // Убедитесь, что контроллер освобождается
+    super.dispose();
+  }
 
   void addToCart(Product product) {
-    setState(() {
-      isAddedToCart = true;
-    });
     final shoppingCart = Provider.of<ShoppingCartModel>(context, listen: false);
     shoppingCart.addItem(product);
     log(product.toString());
@@ -31,32 +44,37 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final productController =
-        Provider.of<ProductController>(context, listen: false);
-    var product = productController.show();
-    if (product == null) {
-      return const Scaffold(
-        body: Center(
-          child: Text('Продукт не найден'),
-        ),
-      );
-    }
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(product.title ?? 'Детали продукта'),
-        actions: buildActions(context),
+    return ChangeNotifierProvider<ProductController>.value(
+      value: productController,
+      child: Consumer<ProductController>(
+        builder: (context, productController, child) {
+          final product = productController.show();
+          if (product == null) {
+            return const Scaffold(
+              body: Center(
+                child: Text('Продукт не найден'),
+              ),
+            );
+          }
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              title: Text(product.title ?? 'Детали продукта'),
+              actions: buildActions(context),
+            ),
+            body: Container(
+              color: const Color.fromRGBO(249, 249, 249, 1),
+              child: buildItem(context, product),
+            ),
+            bottomNavigationBar: buildFooter(product),
+          );
+        },
       ),
-      body: Container(
-        color: const Color.fromRGBO(249, 249, 249, 1),
-        child: buildItem(context, product),
-      ),
-      bottomNavigationBar: buildFooter(product),
     );
   }
 
@@ -123,32 +141,27 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Stack(
-            children: [
-              CarouselSlider(
-                options: CarouselOptions(
-                  height: 250.0,
-                  autoPlay: false,
-                  enlargeCenterPage: true,
-                  viewportFraction: 1,
-                  aspectRatio: 2.0,
-                  initialPage: 2,
-                ),
-                items: product.images?.map((url) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Image.network(
-                        url,
-                        fit: BoxFit.fitWidth,
-                      );
-                    },
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 250.0,
+              autoPlay: false,
+              enlargeCenterPage: true,
+              viewportFraction: 1,
+              aspectRatio: 2.0,
+              initialPage: 2,
+            ),
+            items: product.images?.map((url) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Image.network(
+                    url,
+                    fit: BoxFit.fitWidth,
                   );
-                }).toList(),
-              ),
-              buildRatingWidget(context, product),
-            ],
+                },
+              );
+            }).toList(),
           ),
-          buildIndicator(context, product),
+          buildIndicator(context, product), // Индикатор ниже карусели
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(
@@ -207,6 +220,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
+ 
+
   Widget buildFooter(Product product) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
@@ -229,7 +244,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
             child: Text(
-              isAddedToCart ? 'Добавлено' : 'Добавить в корзину',
+              'Добавить в корзину',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: Colors.white,
                   ),
